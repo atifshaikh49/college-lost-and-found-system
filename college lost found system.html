@@ -1,0 +1,251 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>College Lost and Found</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial;
+            background: #f1f5f9;
+        }
+
+        header {
+            background: #172554;
+            color: white;
+            text-align: center;
+            padding: 25px;
+        }
+
+        nav {
+            background: #1e40af;
+            padding: 15px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 15px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 35px;
+            background: #dbeafe;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background: white;
+            margin: 25px auto;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px #ccc;
+        }
+
+        input, select, textarea {
+            width: 95%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background: #1e40af;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background: #2563eb;
+        }
+
+        .item {
+            background: white;
+            padding: 15px;
+            margin: 12px 0;
+            border-left: 5px solid #1e40af;
+            border-radius: 5px;
+        }
+
+        #items {
+            width: 90%;
+            max-width: 700px;
+            margin: auto;
+        }
+
+        footer {
+            background: #172554;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🔍 College Lost & Found</h1>
+    <p>Helping Students Find Their Lost Belongings</p>
+</header>
+
+<nav>
+    <a href="#home">Home</a>
+    <a href="#report">Report Item</a>
+    <a href="#search">Search Items</a>
+</nav>
+
+<section class="hero" id="home">
+    <h2>Lost Something in College?</h2>
+    <p>Don't worry! Report your lost item or
+    check whether someone has found it.</p>
+</section>
+
+<div class="container" id="report">
+
+    <h2>Report Lost or Found Item</h2>
+
+    <form id="itemForm">
+
+        <input type="text" id="student"
+        placeholder="Student Name" required>
+
+        <select id="type" required>
+            <option value="">Select Report Type</option>
+            <option value="Lost">Lost Item</option>
+            <option value="Found">Found Item</option>
+        </select>
+
+        <input type="text" id="item"
+        placeholder="Item Name (e.g. ID Card)" required>
+
+        <input type="text" id="location"
+        placeholder="Location in College" required>
+
+        <input type="text" id="contact"
+        placeholder="Contact Details" required>
+
+        <textarea id="description"
+        placeholder="Describe the Item" required></textarea>
+
+        <button type="submit">Submit Report</button>
+
+    </form>
+
+    <p id="message"></p>
+
+</div>
+
+<div class="container" id="search">
+
+    <h2>Search Lost & Found Items</h2>
+
+    <input type="text" id="searchBox"
+    placeholder="Search item name..."
+    oninput="searchItems()">
+
+</div>
+
+<h2 style="text-align:center;">📋 Reported Items</h2>
+
+<div id="items">
+    <p style="text-align:center;">
+        No items reported yet.
+    </p>
+</div>
+
+<footer>
+    <p>College Lost & Found Management System</p>
+    <p>College Mini Project | HTML CSS JavaScript</p>
+</footer>
+
+<script>
+
+let reports = [];
+
+const form = document.getElementById("itemForm");
+
+form.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    let report = {
+        student: document.getElementById("student").value,
+        type: document.getElementById("type").value,
+        item: document.getElementById("item").value,
+        location: document.getElementById("location").value,
+        contact: document.getElementById("contact").value,
+        description: document.getElementById("description").value
+    };
+
+    reports.push(report);
+
+    document.getElementById("message").innerHTML =
+        "Report submitted successfully!";
+
+    form.reset();
+
+    displayItems(reports);
+
+});
+
+function displayItems(data) {
+
+    let output = "";
+
+    data.forEach(function(report) {
+
+        output += `
+            <div class="item">
+                <h3>${escapeHTML(report.item)}</h3>
+                <p><b>Type:</b> ${escapeHTML(report.type)}</p>
+                <p><b>Student:</b> ${escapeHTML(report.student)}</p>
+                <p><b>Location:</b> ${escapeHTML(report.location)}</p>
+                <p><b>Contact:</b> ${escapeHTML(report.contact)}</p>
+                <p><b>Description:</b> ${escapeHTML(report.description)}</p>
+            </div>
+        `;
+
+    });
+
+    document.getElementById("items").innerHTML =
+        output || "<p>No matching items found.</p>";
+}
+
+function searchItems() {
+
+    let value = document.getElementById("searchBox")
+        .value.toLowerCase();
+
+    let filtered = reports.filter(function(report) {
+        return report.item.toLowerCase().includes(value);
+    });
+
+    displayItems(filtered);
+}
+
+function escapeHTML(value) {
+    return value.replace(/[&<>"']/g, function(char) {
+        return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        }[char];
+    });
+}
+
+</script>
+
+</body>
+</html>
